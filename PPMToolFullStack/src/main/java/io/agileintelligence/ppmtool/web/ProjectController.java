@@ -24,11 +24,10 @@ public class ProjectController {
     private MapValidationErrorService mapValidationErrorService;
 
 
-
     @PostMapping("")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody final Project project, final BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationErrorsService(result);
-        if (errorMap !=null) {
+        if (errorMap != null) {
             return errorMap;
         }
         Project newProject = projectService.saveOrUpdateProject(project);
@@ -39,5 +38,10 @@ public class ProjectController {
     public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
         Project project = projectService.findProjectByIdentifier(projectId);
         return new ResponseEntity<Project>(project, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public Iterable<Project> getAllProjects() {
+        return projectService.findAllProjects();
     }
 }
